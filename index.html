@@ -1,12 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-sca<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>For My Love ❤️</title>
 
 <style>
@@ -19,7 +16,7 @@ body {
     overflow:hidden;
 }
 
-/* cinematic glow */
+/* glow */
 body::before{
     content:"";
     position:fixed;
@@ -34,6 +31,12 @@ body::before{
     to{transform:scale(1.2);}
 }
 
+/* floating hearts */
+@keyframes float {
+  from { transform: translateY(0); opacity:1; }
+  to { transform: translateY(-600px); opacity:0; }
+}
+
 /* countdown */
 #countdown{
     position:fixed;
@@ -46,7 +49,7 @@ body::before{
     font-size:3rem;
 }
 
-/* glass */
+/* glass card */
 .glass{
     background:rgba(255,255,255,0.12);
     backdrop-filter:blur(15px);
@@ -61,10 +64,11 @@ button{
     border:none;
     border-radius:12px;
     margin:8px;
+    font-size:16px;
 }
 
-#yesBtn{background:#00c853;}
-#noBtn{background:#ff1744; position:absolute;}
+#yesBtn{background:#00c853; color:white;}
+#noBtn{background:#ff1744; color:white; position:absolute;}
 
 /* slideshow */
 #slideshow{
@@ -107,7 +111,7 @@ button{
     font-size:70px;
 }
 
-/* hearts */
+/* game hearts */
 .game-heart{
     position:absolute;
     font-size:32px;
@@ -164,6 +168,11 @@ button{
 </div>
 
 <script>
+
+// name
+const name = "Hariny";
+const txt = `${name}, will you marry me? 💍`;
+
 // countdown
 let c=5;
 let t=setInterval(()=>{
@@ -178,7 +187,6 @@ let t=setInterval(()=>{
 },1000);
 
 // typing
-const txt="Hariny, will you marry me? 💍";
 let i=0;
 function typeText(){
  if(i<txt.length){
@@ -188,10 +196,10 @@ function typeText(){
  }
 }
 
-// no button
+// NO button escape
 noBtn.onmouseover=noBtn.ontouchstart=function(){
- this.style.left=Math.random()*80+"%";
- this.style.top=Math.random()*80+"%";
+ this.style.left = Math.random() * (window.innerWidth - 100) + "px";
+ this.style.top = Math.random() * (window.innerHeight - 50) + "px";
 };
 
 // game
@@ -226,6 +234,7 @@ function spawnHeart(){
   if(hearts>=3){
     unlocked=true;
     yesBtn.disabled=false;
+    yesBtn.innerHTML="YES ❤️";
     gameText.innerHTML="Click YES 💖";
   }
  };
@@ -234,7 +243,7 @@ function spawnHeart(){
 }
 setInterval(spawnHeart,900);
 
-// burst
+// burst effect
 function burst(el){
  for(let i=0;i<8;i++){
   let b=document.createElement("div");
@@ -247,14 +256,31 @@ function burst(el){
  }
 }
 
-// YES
+// fireworks
+function startFireworks(){
+  setInterval(()=>{
+    let f=document.createElement("div");
+    f.innerHTML="🎆";
+    f.style.position="absolute";
+    f.style.left=Math.random()*100+"%";
+    f.style.top=Math.random()*100+"%";
+    f.style.fontSize="30px";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  },300);
+}
+
+// YES click
 yesBtn.onclick=function(){
+
+ alert("She said YES ❤️💍");
 
  document.body.style.background="#fff";
  setTimeout(()=>{
   document.body.style.background="radial-gradient(circle,#ff758c,#ff7eb3)";
  },300);
 
+ // ring drop
  ring.style.display="block";
  ring.style.position="fixed";
  ring.style.left="50%";
@@ -267,9 +293,9 @@ yesBtn.onclick=function(){
   if(y>window.innerHeight/3) clearInterval(drop);
  },20);
 
- // music fade
+ // music
  music.volume=0;
- music.play();
+ music.play().catch(()=>{});
  let v=0;
  let fade=setInterval(()=>{
   v+=0.05;
@@ -277,21 +303,23 @@ yesBtn.onclick=function(){
   if(v>=1) clearInterval(fade);
  },200);
 
- // voice message
+ // voice
  let speech=new SpeechSynthesisUtterance(
-  "Hariny... you are my everything. Will you marry me?"
+  `${name}... you are my everything. Will you marry me?`
  );
  speech.rate=0.9;
  speechSynthesis.speak(speech);
 
+ // slideshow start
  setTimeout(()=>{
   slideshow.style.display="block";
   showPhoto();
+  setInterval(nextSlide,3000);
  },1500);
 
  startFireworks();
 
- // whatsapp redirect
+ // whatsapp
  setTimeout(()=>{
   window.open("https://wa.me/?text=She said YES 💍❤️");
  },8000);
@@ -312,7 +340,6 @@ function showPhoto(){
  },300);
 }
 
-// next slide via hearts
 function nextSlide(){
  p=(p+1)%photos.length;
  showPhoto();
@@ -328,264 +355,9 @@ setInterval(()=>{
  document.body.appendChild(h);
  setTimeout(()=>h.remove(),5000);
 },300);
-</script>
 
-</body>
-</html>le=1.0">
-<title>For My Love ❤️</title>
-
-<style>
-body {
-    margin: 0;
-    text-align: center;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #ff758c, #ff7eb3);
-    overflow: hidden;
-    color: white;
-}
-
-h1 {
-    margin-top: 50px;
-    font-size: 2rem;
-}
-
-/* Buttons */
-button {
-    padding: 12px 22px;
-    font-size: 16px;
-    margin: 10px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-#yesBtn { background: #00c853; color: white; }
-#noBtn { background: #d50000; color: white; position: absolute; }
-
-/* Slideshow */
-#slideshow {
-    display: none;
-    margin-top: 20px;
-    position: relative;
-}
-
-#slideshow img {
-    width: 260px;
-    height: 340px;
-    border-radius: 20px;
-    object-fit: cover;
-    opacity: 0;
-    transform: scale(1);
-    transition: opacity 1.5s ease-in-out, transform 3s ease-in-out;
-    box-shadow: 0 0 25px rgba(255,255,255,0.6);
-}
-
-#slideshow img.show {
-    opacity: 1;
-    transform: scale(1.08);
-}
-
-/* Watermark */
-#watermark {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px;
-    background: rgba(0,0,0,0.4);
-    padding: 4px 10px;
-    border-radius: 10px;
-}
-
-/* Hearts */
-.heart {
-    position: absolute;
-    font-size: 20px;
-    animation: float 5s linear infinite;
-}
-
-@keyframes float {
-    0% {transform: translateY(100vh);}
-    100% {transform: translateY(-10vh);}
-}
-
-/* Game hearts */
-.game-heart {
-    position: absolute;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-/* Love letter */
-#letter {
-    display: none;
-    position: fixed;
-    top: 15%;
-    left: 10%;
-    width: 80%;
-    background: white;
-    color: black;
-    padding: 20px;
-    border-radius: 15px;
-}
-
-/* Fireworks */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-</style>
-</head>
-
-<body>
-
-<h1 id="proposal">Hariny, will you marry me? 💍</h1>
-
-<button id="yesBtn" disabled>Locked 🔒</button>
-<button id="noBtn">No 😜</button>
-
-<div id="message"></div>
-<div id="gameText">Catch 5 hearts to unlock love ❤️</div>
-
-<div id="slideshow">
-    <img id="photo" src="photo1.jpeg">
-    <div id="watermark">Hariny ❤️</div>
-</div>
-
-<div id="letter">
-    <h2>My Love ❤️</h2>
-    <p>
-        You are my today and all of my tomorrows.  
-        I promise to love you endlessly, support you always,  
-        and walk with you through every moment of life. 💖  
-    </p>
-</div>
-
-<audio id="music" loop>
-    <source src="music.mp3" type="audio/mp3">
-</audio>
-
-<canvas id="fireworks"></canvas>
-
-<script>
-// NO button
-const lines = ["Are you sure? 🥺","Think again ❤️","You are my world 💕"];
-document.getElementById("noBtn").onmouseover = function(){
-    this.style.left = Math.random()*80+"%";
-    this.style.top = Math.random()*80+"%";
-    document.getElementById("message").innerHTML =
-        lines[Math.floor(Math.random()*lines.length)];
-};
-
-// GAME
-let score = 0;
-const target = 5;
-
-function spawnHeart(){
-    const heart = document.createElement("div");
-    heart.innerHTML = "❤️";
-    heart.className = "game-heart";
-    heart.style.left = Math.random()*90+"%";
-    heart.style.top = Math.random()*80+"%";
-    document.body.appendChild(heart);
-
-    heart.onclick = function(){
-        heart.remove();
-        score++;
-        document.getElementById("gameText").innerHTML =
-            `Hearts: ${score} ❤️`;
-
-        if(score >= target) unlockLove();
-    };
-
-    setTimeout(()=>heart.remove(),2000);
-}
-setInterval(spawnHeart,800);
-
-function unlockLove(){
-    const btn = document.getElementById("yesBtn");
-    btn.disabled = false;
-    btn.innerHTML = "Yes ❤️ (Unlocked)";
-    document.getElementById("gameText").innerHTML =
-        "You unlocked my heart 💖";
-}
-
-// YES
-document.getElementById("yesBtn").onclick = function(){
-    document.getElementById("proposal").innerHTML = "She said YES! 💍❤️";
-    document.getElementById("letter").style.display="block";
-    document.getElementById("slideshow").style.display="block";
-    document.getElementById("music").play();
-
-    startSlideshow();
-    startFireworks();
-};
-
-// SLIDESHOW
-const photos = [
- "photo1.jpeg","photo2.jpeg","photo3.jpeg","photo4.jpeg","photo5.jpeg"
-];
-
-let i=0, paused=false;
-
-function showPhoto(index){
-    const img=document.getElementById("photo");
-    img.classList.remove("show");
-
-    setTimeout(()=>{
-        img.src=photos[index];
-        img.classList.add("show");
-    },300);
-}
-
-function startSlideshow(){
-    showPhoto(i);
-    setInterval(()=>{
-        if(!paused){
-            i=(i+1)%photos.length;
-            showPhoto(i);
-        }
-    },3000);
-}
-
-// Pause/resume
-document.getElementById("photo").onclick=function(){
-    paused=!paused;
-    document.getElementById("message").innerHTML =
-        paused?"Paused 💕":"Playing ❤️";
-};
-
-// Floating hearts
-setInterval(()=>{
-    const h=document.createElement("div");
-    h.innerHTML="❤️";
-    h.className="heart";
-    h.style.left=Math.random()*100+"%";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),5000);
-},300);
-
-// Fireworks
-function startFireworks(){
-    const c=document.getElementById("fireworks");
-    const ctx=c.getContext("2d");
-    c.width=window.innerWidth;
-    c.height=window.innerHeight;
-
-    setInterval(()=>{
-        const x=Math.random()*c.width;
-        const y=Math.random()*c.height/2;
-        for(let i=0;i<20;i++){
-            ctx.beginPath();
-            ctx.arc(x,y,Math.random()*3,0,2*Math.PI);
-            ctx.fillStyle="white";
-            ctx.fill();
-        }
-    },200);
-}
 </script>
 
 </body>
 </html>
+```
