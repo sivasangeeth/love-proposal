@@ -2,7 +2,336 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-sca<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Love ❤️</title>
+
+<style>
+body {
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background: radial-gradient(circle,#ff758c,#ff7eb3);
+    color:white;
+    text-align:center;
+    overflow:hidden;
+}
+
+/* cinematic glow */
+body::before{
+    content:"";
+    position:fixed;
+    width:200%;
+    height:200%;
+    background:radial-gradient(circle,rgba(255,255,255,0.2),transparent);
+    animation: glow 6s infinite alternate;
+}
+
+@keyframes glow{
+    from{transform:scale(1);}
+    to{transform:scale(1.2);}
+}
+
+/* countdown */
+#countdown{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:3rem;
+}
+
+/* glass */
+.glass{
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(15px);
+    padding:15px;
+    margin:15px;
+    border-radius:20px;
+}
+
+/* buttons */
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    margin:8px;
+}
+
+#yesBtn{background:#00c853;}
+#noBtn{background:#ff1744; position:absolute;}
+
+/* slideshow */
+#slideshow{
+    display:none;
+    position:relative;
+}
+
+#slideshow img{
+    width:90%;
+    max-width:340px;
+    height:440px;
+    border-radius:20px;
+    object-fit:cover;
+    opacity:0;
+    transform:scale(1);
+    transition:1.5s;
+    box-shadow:0 0 40px rgba(255,255,255,0.7);
+}
+
+#slideshow img.show{
+    opacity:1;
+    transform:scale(1.1);
+}
+
+/* quote */
+#quote{
+    position:absolute;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    width:80%;
+    background:rgba(0,0,0,0.5);
+    padding:10px;
+    border-radius:12px;
+}
+
+/* ring */
+#ring{
+    display:none;
+    font-size:70px;
+}
+
+/* hearts */
+.game-heart{
+    position:absolute;
+    font-size:32px;
+    cursor:pointer;
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.3);}
+    100%{transform:scale(1);}
+}
+
+/* burst */
+.burst{
+    position:absolute;
+    animation:explode 0.6s forwards;
+}
+
+@keyframes explode{
+    to{opacity:0; transform:scale(2);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="countdown"><div id="count">5 ❤️</div></div>
+
+<div id="main" style="display:none">
+
+<div class="glass">
+<h1 id="proposal"></h1>
+<button id="yesBtn" disabled>Locked 🔒</button>
+<button id="noBtn">No 😜</button>
+<p id="gameText">Collect 3 hearts ❤️</p>
+</div>
+
+<div id="ring">💍</div>
+
+<div id="slideshow">
+<img id="photo" src="photo1.jpeg">
+<div id="quote"></div>
+</div>
+
+<audio id="music" loop>
+<source src="music.mp3">
+</audio>
+
+<audio id="popSound">
+<source src="pop.mp3">
+</audio>
+
+</div>
+
+<script>
+// countdown
+let c=5;
+let t=setInterval(()=>{
+ c--;
+ count.innerHTML=c+" ❤️";
+ if(c==0){
+  clearInterval(t);
+  countdown.style.display="none";
+  main.style.display="block";
+  typeText();
+ }
+},1000);
+
+// typing
+const txt="Hariny, will you marry me? 💍";
+let i=0;
+function typeText(){
+ if(i<txt.length){
+  proposal.innerHTML+=txt.charAt(i);
+  i++;
+  setTimeout(typeText,80);
+ }
+}
+
+// no button
+noBtn.onmouseover=noBtn.ontouchstart=function(){
+ this.style.left=Math.random()*80+"%";
+ this.style.top=Math.random()*80+"%";
+};
+
+// game
+let hearts=0,combo=0,last=0,unlocked=false;
+
+function spawnHeart(){
+ if(unlocked) return;
+
+ const h=document.createElement("div");
+ h.innerHTML="💖";
+ h.className="game-heart";
+ h.style.left=Math.random()*90+"%";
+ h.style.top=Math.random()*80+"%";
+ document.body.appendChild(h);
+
+ h.onclick=()=>{
+  let now=Date.now();
+  combo=(now-last<700)?combo+1:1;
+  last=now;
+
+  if(navigator.vibrate) navigator.vibrate(50);
+
+  popSound.currentTime=0;
+  popSound.play();
+
+  burst(h);
+  h.remove();
+
+  hearts++;
+  gameText.innerHTML=`${hearts}/3 ❤️ ${combo>1?"Perfect 💖":""}`;
+
+  if(hearts>=3){
+    unlocked=true;
+    yesBtn.disabled=false;
+    gameText.innerHTML="Click YES 💖";
+  }
+ };
+
+ setTimeout(()=>h.remove(),3000);
+}
+setInterval(spawnHeart,900);
+
+// burst
+function burst(el){
+ for(let i=0;i<8;i++){
+  let b=document.createElement("div");
+  b.innerHTML="✨";
+  b.className="burst";
+  b.style.left=el.style.left;
+  b.style.top=el.style.top;
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),600);
+ }
+}
+
+// YES
+yesBtn.onclick=function(){
+
+ document.body.style.background="#fff";
+ setTimeout(()=>{
+  document.body.style.background="radial-gradient(circle,#ff758c,#ff7eb3)";
+ },300);
+
+ ring.style.display="block";
+ ring.style.position="fixed";
+ ring.style.left="50%";
+ ring.style.transform="translateX(-50%)";
+
+ let y=-100;
+ let drop=setInterval(()=>{
+  y+=10;
+  ring.style.top=y+"px";
+  if(y>window.innerHeight/3) clearInterval(drop);
+ },20);
+
+ // music fade
+ music.volume=0;
+ music.play();
+ let v=0;
+ let fade=setInterval(()=>{
+  v+=0.05;
+  music.volume=v;
+  if(v>=1) clearInterval(fade);
+ },200);
+
+ // voice message
+ let speech=new SpeechSynthesisUtterance(
+  "Hariny... you are my everything. Will you marry me?"
+ );
+ speech.rate=0.9;
+ speechSynthesis.speak(speech);
+
+ setTimeout(()=>{
+  slideshow.style.display="block";
+  showPhoto();
+ },1500);
+
+ startFireworks();
+
+ // whatsapp redirect
+ setTimeout(()=>{
+  window.open("https://wa.me/?text=She said YES 💍❤️");
+ },8000);
+};
+
+// slideshow
+const photos=["photo1.jpeg","photo2.jpeg","photo3.jpeg","photo4.jpeg","photo5.jpeg"];
+const quotes=["You are my forever ❤️","My world is you 💖","Forever begins now 💕"];
+
+let p=0;
+
+function showPhoto(){
+ photo.classList.remove("show");
+ setTimeout(()=>{
+  photo.src=photos[p];
+  photo.classList.add("show");
+  quote.innerHTML=quotes[Math.floor(Math.random()*quotes.length)];
+ },300);
+}
+
+// next slide via hearts
+function nextSlide(){
+ p=(p+1)%photos.length;
+ showPhoto();
+}
+
+// floating hearts
+setInterval(()=>{
+ let h=document.createElement("div");
+ h.innerHTML="❤️";
+ h.style.position="absolute";
+ h.style.left=Math.random()*100+"%";
+ h.style.animation="float 5s linear";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),5000);
+},300);
+</script>
+
+</body>
+</html>le=1.0">
 <title>For My Love ❤️</title>
 
 <style>
