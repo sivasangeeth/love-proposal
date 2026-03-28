@@ -1,9 +1,9 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For My Love ❤️</title>
 
 <style>
@@ -49,7 +49,7 @@ body::before{
     font-size:3rem;
 }
 
-/* glass card */
+/* glass */
 .glass{
     background:rgba(255,255,255,0.12);
     backdrop-filter:blur(15px);
@@ -67,8 +67,8 @@ button{
     font-size:16px;
 }
 
-#yesBtn{background:#00c853; color:white;}
-#noBtn{background:#ff1744; color:white; position:absolute;}
+#yesBtn{background:#00c853;color:white;}
+#noBtn{background:#ff1744;color:white;position:absolute;}
 
 /* slideshow */
 #slideshow{
@@ -111,7 +111,7 @@ button{
     font-size:70px;
 }
 
-/* game hearts */
+/* hearts */
 .game-heart{
     position:absolute;
     font-size:32px;
@@ -177,11 +177,11 @@ const txt = `${name}, will you marry me? 💍`;
 let c=5;
 let t=setInterval(()=>{
  c--;
- count.innerHTML=c+" ❤️";
+ document.getElementById("count").innerHTML=c+" ❤️";
  if(c==0){
   clearInterval(t);
-  countdown.style.display="none";
-  main.style.display="block";
+  document.getElementById("countdown").style.display="none";
+  document.getElementById("main").style.display="block";
   typeText();
  }
 },1000);
@@ -190,13 +190,19 @@ let t=setInterval(()=>{
 let i=0;
 function typeText(){
  if(i<txt.length){
-  proposal.innerHTML+=txt.charAt(i);
+  document.getElementById("proposal").innerHTML+=txt.charAt(i);
   i++;
   setTimeout(typeText,80);
  }
 }
 
-// NO button escape
+// buttons
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const gameText=document.getElementById("gameText");
+const popSound=document.getElementById("popSound");
+
+// no button escape
 noBtn.onmouseover=noBtn.ontouchstart=function(){
  this.style.left = Math.random() * (window.innerWidth - 100) + "px";
  this.style.top = Math.random() * (window.innerHeight - 50) + "px";
@@ -220,8 +226,6 @@ function spawnHeart(){
   combo=(now-last<700)?combo+1:1;
   last=now;
 
-  if(navigator.vibrate) navigator.vibrate(50);
-
   popSound.currentTime=0;
   popSound.play();
 
@@ -229,7 +233,7 @@ function spawnHeart(){
   h.remove();
 
   hearts++;
-  gameText.innerHTML=`${hearts}/3 ❤️ ${combo>1?"Perfect 💖":""}`;
+  gameText.innerHTML=`${hearts}/3 ❤️`;
 
   if(hearts>=3){
     unlocked=true;
@@ -243,7 +247,7 @@ function spawnHeart(){
 }
 setInterval(spawnHeart,900);
 
-// burst effect
+// burst
 function burst(el){
  for(let i=0;i<8;i++){
   let b=document.createElement("div");
@@ -256,82 +260,16 @@ function burst(el){
  }
 }
 
-// fireworks
-function startFireworks(){
-  setInterval(()=>{
-    let f=document.createElement("div");
-    f.innerHTML="🎆";
-    f.style.position="absolute";
-    f.style.left=Math.random()*100+"%";
-    f.style.top=Math.random()*100+"%";
-    f.style.fontSize="30px";
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1000);
-  },300);
-}
-
-// YES click
-yesBtn.onclick=function(){
-
- alert("She said YES ❤️💍");
-
- document.body.style.background="#fff";
- setTimeout(()=>{
-  document.body.style.background="radial-gradient(circle,#ff758c,#ff7eb3)";
- },300);
-
- // ring drop
- ring.style.display="block";
- ring.style.position="fixed";
- ring.style.left="50%";
- ring.style.transform="translateX(-50%)";
-
- let y=-100;
- let drop=setInterval(()=>{
-  y+=10;
-  ring.style.top=y+"px";
-  if(y>window.innerHeight/3) clearInterval(drop);
- },20);
-
- // music
- music.volume=0;
- music.play().catch(()=>{});
- let v=0;
- let fade=setInterval(()=>{
-  v+=0.05;
-  music.volume=v;
-  if(v>=1) clearInterval(fade);
- },200);
-
- // voice
- let speech=new SpeechSynthesisUtterance(
-  `${name}... you are my everything. Will you marry me?`
- );
- speech.rate=0.9;
- speechSynthesis.speak(speech);
-
- // slideshow start
- setTimeout(()=>{
-  slideshow.style.display="block";
-  showPhoto();
-  setInterval(nextSlide,3000);
- },1500);
-
- startFireworks();
-
- // whatsapp
- setTimeout(()=>{
-  window.open("https://wa.me/?text=She said YES 💍❤️");
- },8000);
-};
-
 // slideshow
-const photos=["photo1.jpeg","photo2.jpeg","photo3.jpeg","photo4.jpeg","photo5.jpeg"];
+const photos=["photo1.jpeg","photo2.jpeg","photo3.jpeg"];
 const quotes=["You are my forever ❤️","My world is you 💖","Forever begins now 💕"];
 
 let p=0;
 
 function showPhoto(){
+ const photo=document.getElementById("photo");
+ const quote=document.getElementById("quote");
+
  photo.classList.remove("show");
  setTimeout(()=>{
   photo.src=photos[p];
@@ -344,6 +282,21 @@ function nextSlide(){
  p=(p+1)%photos.length;
  showPhoto();
 }
+
+// YES
+yesBtn.onclick=function(){
+
+ alert("She said YES ❤️💍");
+
+ document.getElementById("ring").style.display="block";
+
+ const music=document.getElementById("music");
+ music.play().catch(()=>{});
+
+ document.getElementById("slideshow").style.display="block";
+ showPhoto();
+ setInterval(nextSlide,3000);
+};
 
 // floating hearts
 setInterval(()=>{
@@ -360,3 +313,4 @@ setInterval(()=>{
 
 </body>
 </html>
+```
